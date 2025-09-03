@@ -38,7 +38,7 @@ export default function PartyDetails() {
                 </a>
               </div>
 
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3032.073456315268!2d-112.00033602324724!3d40.5401949714364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8752848f98888879%3A0x89b66f2b2c89659b!2sThe%20View%20Event%20Venue!5e0!3m2!1sen!2sus!4v1693710000000!5m2!1sen!2sus" width="100%" height="300" style={{border:0}} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="rounded-lg mt-4"></iframe>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3032.073456315268!2d-112.00033602324724!3d40.5401949714364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8752848f98888879%3A0x89b66f2b2c89659b!2sThe%20View%20Event%20Venue!5e0!3m2!1sen!2sus!4v1693710000000!5m2!1sen!2sus" width="100%" height="300" style={{border:0}} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="rounded-lg mt-4"></iframe>
             </div>
 
             {/* Dress Code */}

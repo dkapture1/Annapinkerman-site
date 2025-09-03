@@ -1,6 +1,6 @@
 'use client';
 
-import { FaCamera, FaFan } from 'react-icons/fa';
+import { FaFan } from 'react-icons/fa';
 
 export default function AboutMe() {
   return (
