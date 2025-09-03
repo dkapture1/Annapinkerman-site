@@ -1,6 +1,6 @@
 'use client';
 
-import { FaFan } from 'react-icons/fa';
+import Image from 'next/image';
 
 export default function AboutMe() {
   return (
@@ -10,8 +10,13 @@ export default function AboutMe() {
           <div className="md:grid md:grid-cols-3 md:gap-12">
             {/* Coluna da Esquerda (Imagem) */}
             <div className="md:col-span-1 flex items-center justify-center mb-8 md:mb-0">
-              <div className="w-64 h-80 bg-white/30 rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
-                <FaFan className="text-white/50 text-6xl" />
+              <div className="relative w-64 h-80 rounded-2xl shadow-lg overflow-hidden border-4 border-white/50">
+                <Image
+                  src="/images/Anna_aboutme.jpg"
+                  alt="Anna Pinkerman"
+                  layout="fill"
+                  objectFit="cover"
+                />
               </div>
             </div>
 

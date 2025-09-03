@@ -8,8 +8,8 @@ export default function Header() {
     { name: 'About me', href: '#about-me' },
     { name: 'Party', href: '#party' },
     { name: 'Messages', href: '/messages' },
-    { name: 'Photos', href: '#photos' },
-    { name: 'Real Time Photos', href: '/real-time-photos' },
+    { name: 'Memories', href: '#memories' },
+    { name: 'Real Time Photos', href: '#real-time-photos' },
   ];
 
   return (
