@@ -19,6 +19,9 @@ const greatVibes = Great_Vibes({
 export const metadata: Metadata = {
   title: "Anna Pinkerman",
   description: "Site oficial de Anna Pinkerman",
+  icons: {
+    icon: '/images/torre.jpg',
+  },
 };
 
 export default function RootLayout({
