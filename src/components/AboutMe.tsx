@@ -12,7 +12,7 @@ export default function AboutMe() {
             <div className="md:col-span-1 flex items-center justify-center mb-8 md:mb-0">
               <div className="relative w-64 h-80 rounded-2xl shadow-lg overflow-hidden border-4 border-white/50">
                 <Image
-                  src="/images/Anna_aboutme.jpg"
+                  src="/images/Anna_aboutme.JPG"
                   alt="Anna Pinkerman"
                   layout="fill"
                   objectFit="cover"
