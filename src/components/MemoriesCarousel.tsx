@@ -78,3 +78,50 @@ export default function MemoriesCarousel() {
     const timer = setInterval(goToNext, 3000);
     return () => clearInterval(timer);
   }, [goToNext]);
+
+  return (
+    <div className="relative w-full max-w-4xl mx-auto">
+      <div className="overflow-hidden relative h-96">
+        {images.map((src, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              index === currentIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <Image
+              src={`/images/galeria/${src}`}
+              alt={`Memory ${index + 1}`}
+              layout="fill"
+              objectFit="contain"
+              className="rounded-lg"
+            />
+          </div>
+        ))}
+      </div>
+      <button
+        onClick={goToPrevious}
+        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+      >
+        <FaChevronLeft />
+      </button>
+      <button
+        onClick={goToNext}
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+      >
+        <FaChevronRight />
+      </button>
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-3 h-3 rounded-full ${
+              index === currentIndex ? 'bg-white' : 'bg-gray-400'
+            }`}
+          ></button>
+        ))}
+      </div>
+    </div>
+  );
+}
