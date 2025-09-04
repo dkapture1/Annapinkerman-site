@@ -16,6 +16,12 @@ export default function MessageForm() {
     setLoading(true);
     setFeedbackMessage('');
 
+    if (!supabase) {
+      setFeedbackMessage('Error: Database connection is not configured. Message cannot be sent.');
+      setLoading(false);
+      return;
+    }
+
     const { error } = await supabase.from('messages').insert([
       {
         author_name: authorName,

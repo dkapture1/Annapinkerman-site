@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
@@ -56,68 +56,25 @@ const images = [
 export default function MemoriesCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const goToPrevious = () => {
-    const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
-    setCurrentIndex(newIndex);
-  };
+  const goToPrevious = useCallback(() => {
+    setCurrentIndex(current => {
+      const isFirstSlide = current === 0;
+      return isFirstSlide ? images.length - 1 : current - 1;
+    });
+  }, []);
 
-  const goToNext = () => {
-    const isLastSlide = currentIndex === images.length - 1;
-    const newIndex = isLastSlide ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
-  };
+  const goToNext = useCallback(() => {
+    setCurrentIndex(current => {
+      const isLastSlide = current === images.length - 1;
+      return isLastSlide ? 0 : current + 1;
+    });
+  }, []);
 
   const goToSlide = (slideIndex: number) => {
     setCurrentIndex(slideIndex);
   };
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      goToNext();
-    }, 3000);
-
-    return () => clearInterval(timer); // Cleanup the timer
-  }, [currentIndex]);
-
-  return (
-    <div className="max-w-4xl mx-auto relative group">
-      {/* Image Container */}
-      <div className="relative h-[60vh] w-full overflow-hidden rounded-xl shadow-2xl border-8 border-white/50">
-        {images.map((src, index) => (
-          <div
-            key={src}
-            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${currentIndex === index ? 'opacity-100' : 'opacity-0'}`}>
-            <Image
-              src={`/images/galeria/${encodeURIComponent(src)}`}
-              alt={`Memories of Anna - Photo ${index + 1}`}
-              layout="fill"
-              objectFit="contain"
-              priority={index === 0} // Prioritize loading the first image
-            />
-          </div>
-        ))}
-      </div>
-
-      {/* Navigation Buttons */}
-      <div className="hidden group-hover:block absolute top-1/2 -translate-y-1/2 left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-        <FaChevronLeft onClick={goToPrevious} size={30} />
-      </div>
-      <div className="hidden group-hover:block absolute top-1/2 -translate-y-1/2 right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-        <FaChevronRight onClick={goToNext} size={30} />
-      </div>
-
-      {/* Indicator Dots */}
-      <div className="flex justify-center py-4">
-        {images.map((_, slideIndex) => (
-          <div
-            key={slideIndex}
-            onClick={() => goToSlide(slideIndex)}
-            className={`cursor-pointer text-2xl mx-1 ${currentIndex === slideIndex ? 'text-white' : 'text-white/50'}`}>
-            ●
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+    const timer = setInterval(goToNext, 3000);
+    return () => clearInterval(timer);
+  }, [goToNext]);

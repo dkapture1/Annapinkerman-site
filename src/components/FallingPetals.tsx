@@ -13,7 +13,7 @@ const petalImages = [
 export default function FallingPetals() {
   const petalsContainerRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
-  let timeout: NodeJS.Timeout | null = null;
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,10 +26,10 @@ export default function FallingPetals() {
       if (petalsContainerRef.current) {
         petalsContainerRef.current.classList.remove('petals--paused');
       }
-      if (timeout) {
-        clearTimeout(timeout);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
-      timeout = setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         if (petalsContainerRef.current) {
           petalsContainerRef.current.classList.add('petals--paused');
         }
@@ -40,8 +40,8 @@ export default function FallingPetals() {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (timeout) {
-        clearTimeout(timeout);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
     };
   }, []);
