@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { albums, Album } from '../lib/photo-data';
+import { albums } from '../lib/photo-data';
 import MasonryGrid from './MasonryGrid';
 
 interface CloudinaryPhoto {
@@ -34,7 +34,7 @@ const PhotoGallery = () => {
           let errorData;
           try {
             errorData = await response.json();
-          } catch (jsonError) {
+          } catch {
             // If the response is not JSON, use the status text
             throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
           }

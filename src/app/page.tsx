@@ -18,7 +18,7 @@ export default function Home() {
         <VideoPlayer src="/videos/hero.mp4" />
         <div id="home" className="pt-24">
           <h2 className="font-script text-6xl text-center text-gray-800 py-8">
-            Celebrating Anna's Sweet Fifteen
+            Celebrating Anna&apos;s Sweet Fifteen
           </h2>
           <PhotoGallery />
         </div>
