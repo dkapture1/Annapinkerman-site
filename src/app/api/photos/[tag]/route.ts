@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import cloudinary from 'cloudinary';
 
-export async function GET(request: Request, { params }: { params: { tag: string } }) {
-  const { tag } = params;
+export async function GET(request: NextRequest, { params }: { params: Promise<{ tag: string }> }) {
+  const { tag } = await params;
 
   if (!tag) {
     return NextResponse.json({ error: 'Tag parameter is required' }, { status: 400 });
