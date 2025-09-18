@@ -1,0 +1,83 @@
+
+'use client';
+
+import { useState, useEffect } from 'react';
+import { albums, Album } from '../lib/photo-data';
+import MasonryGrid from './MasonryGrid';
+
+interface CloudinaryPhoto {
+  public_id: string;
+  secure_url: string;
+  width: number;
+  height: number;
+  tags: string[];
+  context?: any;
+}
+
+const PhotoGallery = () => {
+  const [activeAlbumSlug, setActiveAlbumSlug] = useState(albums[0].slug);
+  const [photos, setPhotos] = useState<CloudinaryPhoto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const activeAlbum = albums.find(album => album.slug === activeAlbumSlug);
+
+  useEffect(() => {
+    if (!activeAlbum) return;
+
+    const fetchPhotos = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(`/api/photos/${activeAlbum.tag}`);
+        if (!response.ok) {
+          let errorData;
+          try {
+            errorData = await response.json();
+          } catch (jsonError) {
+            // If the response is not JSON, use the status text
+            throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+          }
+          // Use the error message from the server if available
+          const message = (errorData.details ? `${errorData.error}: ${errorData.details}` : errorData.error) || `HTTP error! status: ${response.status}`;
+          throw new Error(message);
+        }
+        const data: CloudinaryPhoto[] = await response.json();
+        setPhotos(data);
+      } catch (e: any) {
+        setError(`Failed to load photos: ${e.message}`);
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPhotos();
+  }, [activeAlbum]);
+
+  return (
+    <div>
+      <div className="flex justify-center space-x-4 mb-8">
+        {albums.map(album => (
+          <button
+            key={album.slug}
+            onClick={() => setActiveAlbumSlug(album.slug)}
+            className={`px-4 py-2 rounded-full text-white transition-colors duration-300 ${
+              activeAlbumSlug === album.slug
+                ? 'bg-pink-500'
+                : 'bg-gray-700 hover:bg-pink-400'
+            }`}>
+            {album.title}
+          </button>
+        ))}
+      </div>
+
+      {loading && <p className="text-center text-white">Loading photos...</p>}
+      {error && <p className="text-center text-red-500">Error: {error}</p>}
+
+      {!loading && !error && activeAlbum && <MasonryGrid photos={photos} />}
+    </div>
+  );
+};
+
+export default PhotoGallery;
