@@ -1,12 +1,11 @@
 import Header from '@/components/Header';
-import CountdownTimer from '@/components/CountdownTimer';
 import VideoPlayer from '@/components/VideoPlayer';
 import AboutMe from '@/components/AboutMe';
 import PartyDetails from '@/components/PartyDetails';
 import MessageForm from '@/components/MessageForm';
 import MemoriesCarousel from '@/components/MemoriesCarousel';
-import RealTimePhotos from '@/components/RealTimePhotos';
 import FallingPetals from '@/components/FallingPetals';
+import PhotoGallery from '@/components/PhotoGallery';
 
 export default function Home() {
   return (
@@ -16,10 +15,13 @@ export default function Home() {
       </div>
       <div className="relative z-10">
         <Header />
-        <div id="home">
-          <CountdownTimer />
-        </div>
         <VideoPlayer src="/videos/hero.mp4" />
+        <div id="home" className="pt-24">
+          <h2 className="font-script text-6xl text-center text-gray-800 py-8">
+            Celebrating Anna's Sweet Fifteen
+          </h2>
+          <PhotoGallery />
+        </div>
         <AboutMe />
         <PartyDetails />
         <MessageForm />
@@ -31,7 +33,6 @@ export default function Home() {
             <MemoriesCarousel />
           </div>
         </section>
-        <RealTimePhotos />
         <FallingPetals />
       </div>
     </div>

@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anna Pinkerman - Site Pessoal
 
-## Getting Started
+Este é um projeto [Next.js](https://nextjs.org) para o site pessoal de Anna Pinkerman, criado para celebrar um evento especial.
 
-First, run the development server:
+## Visão Geral
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+O site inclui:
+*   Contagem regressiva para o evento.
+*   Detalhes da festa.
+*   Uma seção "Sobre Mim".
+*   Carrossel de memórias e slideshow de fotos.
+*   Um formulário para convidados deixarem mensagens.
+*   Galeria de fotos em tempo real.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tecnologias
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+*   **Framework:** Next.js
+*   **Linguagem:** TypeScript
+*   **Estilização:** Tailwind CSS
+*   **Backend (BaaS):** Supabase (para mensagens e fotos em tempo real)
+*   **Ícones:** React Icons
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Estrutura do Projeto
 
-## Learn More
+*   `src/app/`: Páginas da aplicação.
+*   `src/components/`: Componentes React reutilizáveis.
+*   `src/lib/`: Configuração do cliente Supabase.
+*   `public/`: Imagens, vídeos e outros arquivos estáticos.
 
-To learn more about Next.js, take a look at the following resources:
+## Como Começar
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2.  **Configure as Variáveis de Ambiente:**
+    Crie um arquivo `.env.local` na raiz do projeto e adicione as chaves do seu projeto Supabase:
+    ```
+    NEXT_PUBLIC_SUPABASE_URL=URL_DO_SEU_PROJETO_SUPABASE
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=SUA_CHAVE_ANON_SUPABASE
+    ```
 
-## Deploy on Vercel
+3.  **Execute o servidor de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
+    Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts Disponíveis
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*   `npm run dev`: Inicia o servidor de desenvolvimento.
+*   `npm run build`: Cria a build de produção do projeto.
+*   `npm run start`: Inicia um servidor de produção.
+*   `npm run lint`: Executa o linter para análise de código.
