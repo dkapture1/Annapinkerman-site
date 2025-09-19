@@ -1,122 +1,99 @@
-import { NextRequest, NextResponse } from 'next/server';
-import cloudinary from 'cloudinary';
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ tag: string }> }) {
-  const { tag } = await params;
+// Cloudinary configuration
+const cloudinary = require('cloudinary').v2
 
-  if (!tag) {
-    return NextResponse.json({ error: 'Tag parameter is required' }, { status: 400 });
-  }
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
-  // Debug: Log all environment variables
-  console.log('Environment variables check:', {
-    NODE_ENV: process.env.NODE_ENV,
-    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
-    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY ? '***' + process.env.CLOUDINARY_API_KEY.slice(-4) : 'undefined',
-    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET ? '***' + process.env.CLOUDINARY_API_SECRET.slice(-4) : 'undefined',
-    allEnvKeys: Object.keys(process.env).filter(key => key.includes('CLOUDINARY'))
-  });
+// Mapeamento das URLs para as pastas reais no Cloudinary
+const categoryMapping: { [key: string]: string } = {
+  'behind-the-scenes-details': 'Photos party/Behind the Scenes & Details',
+  'guests-arriving': 'Photos party/Guests Arriving', 
+  'ceremony-tributes': 'Photos party/Ceremony & Tributes',
+  'waltz': 'Photos party/Waltz',
+  'the-party-vibes': 'Photos party/The Party Vibes'
+}
 
-  // Fallback para produção se as variáveis de ambiente não estiverem configuradas
-  const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || 'daoxy15hl';
-  const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY || '475458441341848';
-  const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET || 'SgzQInXLDji7vk6jBt_P8wYpSgw';
-
-  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) {
-    console.error('Cloudinary credentials are not set. Please check your environment variables.');
-    console.error('Missing variables:', {
-      CLOUDINARY_CLOUD_NAME: !!CLOUDINARY_CLOUD_NAME,
-      CLOUDINARY_API_KEY: !!CLOUDINARY_API_KEY,
-      CLOUDINARY_API_SECRET: !!CLOUDINARY_API_SECRET
-    });
-    return NextResponse.json(
-      { 
-        error: 'Server configuration error', 
-        details: 'Cloudinary credentials are not fully set. Please configure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET environment variables.',
-        missing: {
-          CLOUDINARY_CLOUD_NAME: !CLOUDINARY_CLOUD_NAME,
-          CLOUDINARY_API_KEY: !CLOUDINARY_API_KEY,
-          CLOUDINARY_API_SECRET: !CLOUDINARY_API_SECRET
-        }
-      },
-      { status: 500 }
-    );
-  }
-
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ tag: string }> }
+) {
   try {
-    console.log('Configurando Cloudinary com:', {
-      cloud_name: CLOUDINARY_CLOUD_NAME,
-      api_key: CLOUDINARY_API_KEY ? '***' + CLOUDINARY_API_KEY.slice(-4) : 'undefined',
-      api_secret: CLOUDINARY_API_SECRET ? '***' + CLOUDINARY_API_SECRET.slice(-4) : 'undefined'
-    });
+    console.log('Environment check:', {
+      NODE_ENV: process.env.NODE_ENV,
+      CLOUDINARY_CLOUD_NAME: !!process.env.CLOUDINARY_CLOUD_NAME,
+      CLOUDINARY_API_KEY: !!process.env.CLOUDINARY_API_KEY,
+      CLOUDINARY_API_SECRET: !!process.env.CLOUDINARY_API_SECRET,
+    })
 
-    cloudinary.v2.config({
-      cloud_name: CLOUDINARY_CLOUD_NAME,
-      api_key: CLOUDINARY_API_KEY,
-      api_secret: CLOUDINARY_API_SECRET,
-      secure: true,
-    });
-
-    console.log('Buscando fotos com tag:', tag);
-    const result = await cloudinary.v2.search
-      .expression(`tags=${tag}`)
-      .max_results(500)
-      .execute();
+    // Aguardar a resolução da Promise params (Next.js 15)
+    const resolvedParams = await params
+    const { tag } = resolvedParams
     
-    console.log('Resultado da busca:', {
-      totalCount: result.total_count,
-      resourcesCount: result.resources.length,
-      tag: tag
-    });
+    console.log('Received tag:', tag)
+    
+    // Mapear o tag para a pasta correta no Cloudinary
+    const folderPath = categoryMapping[tag.toLowerCase()]
+    
+    if (!folderPath) {
+      console.log('Category not found:', tag)
+      return NextResponse.json(
+        { 
+          error: 'Category not found',
+          availableCategories: Object.keys(categoryMapping),
+          receivedTag: tag
+        },
+        { status: 404 }
+      )
+    }
 
-    const photos = result.resources.map((resource: any) => ({
-      public_id: resource.public_id,
-      secure_url: resource.secure_url,
+    console.log('Searching in folder:', folderPath)
+
+    // Buscar imagens na pasta do Cloudinary
+    const result = await cloudinary.search
+      .expression(`folder:"${folderPath}"`)
+      .max_results(100)
+      .execute()
+
+    console.log('Cloudinary search result:', {
+      total: result.total_count,
+      found: result.resources?.length || 0
+    })
+
+    // Transformar os resultados para o formato esperado
+    const photos = result.resources?.map((resource: any, index: number) => ({
+      id: resource.public_id,
+      url: resource.secure_url,
+      category: folderPath.split('/').pop(),
+      alt: `Gallery image ${index + 1}`,
       width: resource.width,
       height: resource.height,
-      tags: resource.tags,
-      context: resource.context,
-    }));
+      public_id: resource.public_id
+    })) || []
 
-    return NextResponse.json(photos);
+    return NextResponse.json({
+      photos,
+      category: folderPath,
+      tag,
+      total: photos.length,
+      success: true
+    })
+
   } catch (error: any) {
-    console.error('Error fetching photos from Cloudinary:', error);
-    console.error('Error details:', {
-      message: error.message,
-      code: error.code,
-      status: error.status,
-      name: error.name,
-      stack: error.stack,
-      http_code: error.http_code,
-      response: error.response
-    });
-    
-    // Log the search expression for debugging
-    console.error('Search expression:', `tags=${tag}`);
-    console.error('Environment check:', {
-      NODE_ENV: process.env.NODE_ENV,
-      CLOUDINARY_CLOUD_NAME: !!CLOUDINARY_CLOUD_NAME,
-      CLOUDINARY_API_KEY: !!CLOUDINARY_API_KEY,
-      CLOUDINARY_API_SECRET: !!CLOUDINARY_API_SECRET
-    });
+    console.error('❌ Error in API route:', error)
+    console.error('Error message:', error.message)
     
     return NextResponse.json(
-        { 
-          error: 'Failed to fetch photos from Cloudinary.', 
-          details: error.message,
-          code: error.code,
-          status: error.status,
-          http_code: error.http_code,
-          searchExpression: `tags=${tag}`,
-          timestamp: new Date().toISOString(),
-          environment: process.env.NODE_ENV,
-          cloudinaryConfig: {
-            cloud_name: !!CLOUDINARY_CLOUD_NAME,
-            api_key: !!CLOUDINARY_API_KEY,
-            api_secret: !!CLOUDINARY_API_SECRET
-          }
-        }, 
-        { status: 500 }
-    );
+      { 
+        error: 'Internal server error',
+        message: error.message || 'Unknown error',
+        details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      },
+      { status: 500 }
+    )
   }
 }

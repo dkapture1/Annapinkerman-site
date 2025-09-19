@@ -5,18 +5,27 @@ import { useState, useEffect } from 'react';
 import { albums } from '../lib/photo-data';
 import MasonryGrid from './MasonryGrid';
 
-interface CloudinaryPhoto {
-  public_id: string;
-  secure_url: string;
-  width: number;
-  height: number;
-  tags: string[];
-  context?: any;
+interface Photo {
+  id: string;
+  url: string;
+  category: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+  public_id?: string;
+}
+
+interface ApiResponse {
+  photos: Photo[];
+  category: string;
+  tag: string;
+  total: number;
+  success: boolean;
 }
 
 const PhotoGallery = () => {
   const [activeAlbumSlug, setActiveAlbumSlug] = useState(albums[0].slug);
-  const [photos, setPhotos] = useState<CloudinaryPhoto[]>([]);
+  const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,11 +48,11 @@ const PhotoGallery = () => {
             throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
           }
           // Use the error message from the server if available
-          const message = (errorData.details ? `${errorData.error}: ${errorData.details}` : errorData.error) || `HTTP error! status: ${response.status}`;
+          const message = (errorData.message ? `${errorData.error}: ${errorData.message}` : errorData.error) || `HTTP error! status: ${response.status}`;
           throw new Error(message);
         }
-        const data: CloudinaryPhoto[] = await response.json();
-        setPhotos(data);
+        const data: ApiResponse = await response.json();
+        setPhotos(data.photos || []);
       } catch (e: any) {
         setError(`Failed to load photos: ${e.message}`);
         console.error(e);
@@ -90,7 +99,7 @@ const PhotoGallery = () => {
         </div>
       )}
 
-      {!loading && !error && activeAlbum && <MasonryGrid photos={photos} />}
+      {!loading && !error && activeAlbum && <MasonryGrid photos={photos} category={activeAlbum.title} />}
     </div>
   );
 };
