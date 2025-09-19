@@ -46,18 +46,27 @@ export async function GET(
     console.log('Searching by tag:', tag)
 
     // Configurar Cloudinary
-    cloudinary.v2.config({
-      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-      api_key: process.env.CLOUDINARY_API_KEY,
-      api_secret: process.env.CLOUDINARY_API_SECRET,
-      secure: true,
-    });
+    console.log('Configuring Cloudinary...')
+    try {
+      cloudinary.v2.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+        secure: true,
+      });
+      console.log('✅ Cloudinary configured successfully')
+    } catch (configError) {
+      console.error('❌ Error configuring Cloudinary:', configError)
+      throw configError
+    }
 
     // Buscar imagens por tag no Cloudinary (método original que funcionava)
+    console.log('Starting Cloudinary search...')
     const result = await cloudinary.v2.search
       .expression(`tags=${tag}`)
       .max_results(100)
       .execute()
+    console.log('✅ Cloudinary search completed')
 
     console.log('Cloudinary search result:', {
       total: result.total_count,
@@ -79,11 +88,31 @@ export async function GET(
   } catch (error: any) {
     console.error('❌ Error in API route:', error)
     console.error('Error message:', error.message)
+    console.error('Error code:', error.code)
+    console.error('Error status:', error.status)
+    console.error('Error http_code:', error.http_code)
+    console.error('Error name:', error.name)
+    console.error('Error stack:', error.stack)
+    console.error('Full error object:', JSON.stringify(error, null, 2))
+    
+    // Log environment details for debugging
+    console.error('Environment details:', {
+      NODE_ENV: process.env.NODE_ENV,
+      CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+      CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY ? '***' + process.env.CLOUDINARY_API_KEY.slice(-4) : 'undefined',
+      CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET ? '***' + process.env.CLOUDINARY_API_SECRET.slice(-4) : 'undefined'
+    })
     
     return NextResponse.json(
       { 
         error: 'Internal server error',
         message: error.message || 'Unknown error',
+        code: error.code,
+        status: error.status,
+        http_code: error.http_code,
+        name: error.name,
+        environment: process.env.NODE_ENV,
+        timestamp: new Date().toISOString(),
         details: process.env.NODE_ENV === 'development' ? error.stack : undefined
       },
       { status: 500 }
