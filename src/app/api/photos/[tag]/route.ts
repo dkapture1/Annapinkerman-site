@@ -64,24 +64,17 @@ export async function GET(
       found: result.resources?.length || 0
     })
 
-    // Transformar os resultados para o formato esperado
-    const photos = result.resources?.map((resource: any, index: number) => ({
-      id: resource.public_id,
-      url: resource.secure_url,
-      category: folderPath.split('/').pop(),
-      alt: `Gallery image ${index + 1}`,
+    // Transformar os resultados para o formato original esperado
+    const photos = result.resources?.map((resource: any) => ({
+      public_id: resource.public_id,
+      secure_url: resource.secure_url,
       width: resource.width,
       height: resource.height,
-      public_id: resource.public_id
+      tags: resource.tags || [],
+      context: resource.context
     })) || []
 
-    return NextResponse.json({
-      photos,
-      category: folderPath,
-      tag,
-      total: photos.length,
-      success: true
-    })
+    return NextResponse.json(photos)
 
   } catch (error: any) {
     console.error('❌ Error in API route:', error)
