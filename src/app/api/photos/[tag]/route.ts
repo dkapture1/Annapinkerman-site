@@ -13,9 +13,22 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 
   if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) {
-    console.error('Cloudinary credentials are not set. Please check your .env.local file and restart the server.');
+    console.error('Cloudinary credentials are not set. Please check your environment variables.');
+    console.error('Missing variables:', {
+      CLOUDINARY_CLOUD_NAME: !!CLOUDINARY_CLOUD_NAME,
+      CLOUDINARY_API_KEY: !!CLOUDINARY_API_KEY,
+      CLOUDINARY_API_SECRET: !!CLOUDINARY_API_SECRET
+    });
     return NextResponse.json(
-      { error: 'Server configuration error', details: 'Cloudinary credentials are not fully set.' },
+      { 
+        error: 'Server configuration error', 
+        details: 'Cloudinary credentials are not fully set. Please configure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET environment variables.',
+        missing: {
+          CLOUDINARY_CLOUD_NAME: !CLOUDINARY_CLOUD_NAME,
+          CLOUDINARY_API_KEY: !CLOUDINARY_API_KEY,
+          CLOUDINARY_API_SECRET: !CLOUDINARY_API_SECRET
+        }
+      },
       { status: 500 }
     );
   }

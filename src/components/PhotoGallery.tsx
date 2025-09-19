@@ -72,8 +72,23 @@ const PhotoGallery = () => {
         ))}
       </div>
 
-      {loading && <p className="text-center text-white">Loading photos...</p>}
-      {error && <p className="text-center text-red-500">Error: {error}</p>}
+      {loading && (
+        <div className="text-center text-white">
+          <p>Carregando fotos...</p>
+          <div className="mt-4">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+          </div>
+        </div>
+      )}
+      {error && (
+        <div className="text-center text-red-500 bg-red-50 p-6 rounded-lg mx-4">
+          <h3 className="text-lg font-semibold mb-2">❌ Erro ao carregar fotos</h3>
+          <p className="text-sm">{error}</p>
+          <p className="text-xs mt-2 text-gray-600">
+            Se este erro persistir, verifique se as variáveis de ambiente do Cloudinary estão configuradas corretamente.
+          </p>
+        </div>
+      )}
 
       {!loading && !error && activeAlbum && <MasonryGrid photos={photos} />}
     </div>
