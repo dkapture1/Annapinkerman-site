@@ -14,23 +14,15 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ tag: string }> }
 ) {
-  console.log('🚀 API Route started')
-  try {
-    console.log('Environment check:', {
-      NODE_ENV: process.env.NODE_ENV,
-      CLOUDINARY_CLOUD_NAME: !!process.env.CLOUDINARY_CLOUD_NAME,
-      CLOUDINARY_API_KEY: !!process.env.CLOUDINARY_API_KEY,
-      CLOUDINARY_API_SECRET: !!process.env.CLOUDINARY_API_SECRET,
-    })
+  const resolvedParams = await params
+  const { tag } = resolvedParams
 
-    console.log('📋 Resolving params...')
-    // Aguardar a resolução da Promise params (Next.js 15)
-    const resolvedParams = await params
-    console.log('✅ Params resolved:', resolvedParams)
-    const { tag } = resolvedParams
-    
-    console.log('Received tag:', tag)
-    
+  console.log(`API route called for tag: ${tag}`);
+  console.log(`Cloud Name read from env: ${process.env.CLOUDINARY_CLOUD_NAME}`);
+  console.log(`API Key read from env: ${process.env.CLOUDINARY_API_KEY ? 'Loaded' : 'NOT LOADED'}`);
+  console.log(`API Secret read from env: ${process.env.CLOUDINARY_API_SECRET ? 'Loaded' : 'NOT LOADED'}`);
+
+  try {
     // Verificar se o tag é válido
     const validTags = Object.keys(categoryMapping)
     
@@ -46,37 +38,20 @@ export async function GET(
       )
     }
 
-    console.log('Searching by tag:', tag)
-
     // Configurar Cloudinary
-    console.log('Configuring Cloudinary...')
-    try {
-      cloudinary.v2.config({
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
-        secure: true,
-      });
-      console.log('✅ Cloudinary configured successfully')
-    } catch (configError) {
-      console.error('❌ Error configuring Cloudinary:', configError)
-      throw configError
-    }
+    cloudinary.v2.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+      secure: true,
+    });
 
-    // Buscar imagens por tag no Cloudinary (método original que funcionava)
-    console.log('Starting Cloudinary search...')
+    // Buscar imagens por tag no Cloudinary
     const result = await cloudinary.v2.search
       .expression(`tags=${tag}`)
       .max_results(100)
       .execute()
-    console.log('✅ Cloudinary search completed')
 
-    console.log('Cloudinary search result:', {
-      total: result.total_count,
-      found: result.resources?.length || 0
-    })
-
-    // Transformar os resultados para o formato original esperado
     const photos = result.resources?.map((resource: any) => ({
       public_id: resource.public_id,
       secure_url: resource.secure_url,
@@ -89,34 +64,12 @@ export async function GET(
     return NextResponse.json(photos)
 
   } catch (error: any) {
-    console.error('❌ Error in API route:', error)
-    console.error('Error message:', error.message)
-    console.error('Error code:', error.code)
-    console.error('Error status:', error.status)
-    console.error('Error http_code:', error.http_code)
-    console.error('Error name:', error.name)
-    console.error('Error stack:', error.stack)
-    console.error('Full error object:', JSON.stringify(error, null, 2))
-    
-    // Log environment details for debugging
-    console.error('Environment details:', {
-      NODE_ENV: process.env.NODE_ENV,
-      CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
-      CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY ? '***' + process.env.CLOUDINARY_API_KEY.slice(-4) : 'undefined',
-      CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET ? '***' + process.env.CLOUDINARY_API_SECRET.slice(-4) : 'undefined'
-    })
+    console.error('Detailed error caught in API route:', error);
     
     return NextResponse.json(
       { 
-        error: 'Internal server error',
-        message: error.message || 'Unknown error',
-        code: error.code,
-        status: error.status,
-        http_code: error.http_code,
-        name: error.name,
-        environment: process.env.NODE_ENV,
-        timestamp: new Date().toISOString(),
-        details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        error: 'An internal server error occurred.', 
+        details: 'Check server logs on Vercel for more information.' 
       },
       { status: 500 }
     )
