@@ -1,13 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-// Cloudinary configuration
-const cloudinary = require('cloudinary').v2
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-})
+import cloudinary from 'cloudinary'
 
 // Mapeamento das URLs para as pastas reais no Cloudinary
 const categoryMapping: { [key: string]: string } = {
@@ -36,26 +28,34 @@ export async function GET(
     
     console.log('Received tag:', tag)
     
-    // Mapear o tag para a pasta correta no Cloudinary
-    const folderPath = categoryMapping[tag.toLowerCase()]
+    // Verificar se o tag é válido
+    const validTags = Object.keys(categoryMapping)
     
-    if (!folderPath) {
+    if (!validTags.includes(tag.toLowerCase())) {
       console.log('Category not found:', tag)
       return NextResponse.json(
         { 
           error: 'Category not found',
-          availableCategories: Object.keys(categoryMapping),
+          availableCategories: validTags,
           receivedTag: tag
         },
         { status: 404 }
       )
     }
 
-    console.log('Searching in folder:', folderPath)
+    console.log('Searching by tag:', tag)
 
-    // Buscar imagens na pasta do Cloudinary
-    const result = await cloudinary.search
-      .expression(`folder:"${folderPath}"`)
+    // Configurar Cloudinary
+    cloudinary.v2.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+      secure: true,
+    });
+
+    // Buscar imagens por tag no Cloudinary (método original que funcionava)
+    const result = await cloudinary.v2.search
+      .expression(`tags=${tag}`)
       .max_results(100)
       .execute()
 
