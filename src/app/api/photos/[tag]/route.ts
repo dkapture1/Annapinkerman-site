@@ -8,9 +8,19 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json({ error: 'Tag parameter is required' }, { status: 400 });
   }
 
-  const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
-  const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
-  const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
+  // Debug: Log all environment variables
+  console.log('Environment variables check:', {
+    NODE_ENV: process.env.NODE_ENV,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY ? '***' + process.env.CLOUDINARY_API_KEY.slice(-4) : 'undefined',
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET ? '***' + process.env.CLOUDINARY_API_SECRET.slice(-4) : 'undefined',
+    allEnvKeys: Object.keys(process.env).filter(key => key.includes('CLOUDINARY'))
+  });
+
+  // Fallback para produção se as variáveis de ambiente não estiverem configuradas
+  const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || 'daoxy15hl';
+  const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY || '475458441341848';
+  const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET || 'SgzQInXLDji7vk6jBt_P8wYpSgw';
 
   if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) {
     console.error('Cloudinary credentials are not set. Please check your environment variables.');
