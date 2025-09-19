@@ -43,10 +43,13 @@ const PhotoGallery = () => {
           throw new Error(message);
         }
         const data: CloudinaryPhoto[] = await response.json();
+        console.log('Data received from API:', data);
         setPhotos(data);
+        console.log('Photos state updated:', data);
       } catch (e: any) {
         setError(`Failed to load photos: ${e.message}`);
-        console.error(e);
+        console.error('Error fetching photos:', e);
+        console.log('Error state updated:', e.message);
       } finally {
         setLoading(false);
       }
