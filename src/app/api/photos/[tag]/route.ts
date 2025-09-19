@@ -34,6 +34,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   }
 
   try {
+    console.log('Configurando Cloudinary com:', {
+      cloud_name: CLOUDINARY_CLOUD_NAME,
+      api_key: CLOUDINARY_API_KEY ? '***' + CLOUDINARY_API_KEY.slice(-4) : 'undefined',
+      api_secret: CLOUDINARY_API_SECRET ? '***' + CLOUDINARY_API_SECRET.slice(-4) : 'undefined'
+    });
+
     cloudinary.v2.config({
       cloud_name: CLOUDINARY_CLOUD_NAME,
       api_key: CLOUDINARY_API_KEY,
@@ -41,10 +47,17 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       secure: true,
     });
 
+    console.log('Buscando fotos com tag:', tag);
     const result = await cloudinary.v2.search
       .expression(`tags=${tag}`)
       .max_results(500)
       .execute();
+    
+    console.log('Resultado da busca:', {
+      totalCount: result.total_count,
+      resourcesCount: result.resources.length,
+      tag: tag
+    });
 
     const photos = result.resources.map((resource: any) => ({
       public_id: resource.public_id,
@@ -58,8 +71,26 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json(photos);
   } catch (error: any) {
     console.error('Error fetching photos from Cloudinary:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      status: error.status,
+      name: error.name,
+      stack: error.stack
+    });
+    
+    // Log the search expression for debugging
+    console.error('Search expression:', `tags=${tag}`);
+    
     return NextResponse.json(
-        { error: 'Failed to fetch photos from Cloudinary.', details: error.message }, 
+        { 
+          error: 'Failed to fetch photos from Cloudinary.', 
+          details: error.message,
+          code: error.code,
+          status: error.status,
+          searchExpression: `tags=${tag}`,
+          timestamp: new Date().toISOString()
+        }, 
         { status: 500 }
     );
   }
