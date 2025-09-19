@@ -76,11 +76,19 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       code: error.code,
       status: error.status,
       name: error.name,
-      stack: error.stack
+      stack: error.stack,
+      http_code: error.http_code,
+      response: error.response
     });
     
     // Log the search expression for debugging
     console.error('Search expression:', `tags=${tag}`);
+    console.error('Environment check:', {
+      NODE_ENV: process.env.NODE_ENV,
+      CLOUDINARY_CLOUD_NAME: !!CLOUDINARY_CLOUD_NAME,
+      CLOUDINARY_API_KEY: !!CLOUDINARY_API_KEY,
+      CLOUDINARY_API_SECRET: !!CLOUDINARY_API_SECRET
+    });
     
     return NextResponse.json(
         { 
@@ -88,8 +96,15 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
           details: error.message,
           code: error.code,
           status: error.status,
+          http_code: error.http_code,
           searchExpression: `tags=${tag}`,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          environment: process.env.NODE_ENV,
+          cloudinaryConfig: {
+            cloud_name: !!CLOUDINARY_CLOUD_NAME,
+            api_key: !!CLOUDINARY_API_KEY,
+            api_secret: !!CLOUDINARY_API_SECRET
+          }
         }, 
         { status: 500 }
     );
