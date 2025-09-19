@@ -14,6 +14,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ tag: string }> }
 ) {
+  console.log('🚀 API Route started')
   try {
     console.log('Environment check:', {
       NODE_ENV: process.env.NODE_ENV,
@@ -22,8 +23,10 @@ export async function GET(
       CLOUDINARY_API_SECRET: !!process.env.CLOUDINARY_API_SECRET,
     })
 
+    console.log('📋 Resolving params...')
     // Aguardar a resolução da Promise params (Next.js 15)
     const resolvedParams = await params
+    console.log('✅ Params resolved:', resolvedParams)
     const { tag } = resolvedParams
     
     console.log('Received tag:', tag)
