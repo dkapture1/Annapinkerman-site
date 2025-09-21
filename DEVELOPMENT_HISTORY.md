@@ -10,7 +10,43 @@
 
 ---
 
-## 🚨 Problemas Identificados e Soluções
+## 🗓️ 21 de Setembro de 2025 - Debug de Responsividade Mobile
+
+### Problema
+O site não estava se adaptando corretamente em dispositivos móveis (especificamente iPhone 15 Pro), exibindo a versão de desktop.
+
+### Diagnóstico e Solução
+
+1.  **Análise Inicial**: Verificado o `layout.tsx` e confirmado que a meta tag `viewport` estava configurada corretamente para Next.js.
+2.  **Teste de Media Query**: Um teste visual foi adicionado diretamente em `src/app/layout.tsx` para isolar o problema. Este teste adicionou uma barra vermelha no topo da tela em viewports menores que 430px.
+    ```html
+    <style>
+      {`
+        @media (max-width: 430px) {
+          .mobile-test {
+            display: block !important;
+            background: red;
+            /* ... outros estilos de teste ... */
+          }
+        }
+      `}
+    </style>
+    <div class="mobile-test" style="display: none;">Mobile CSS Test</div>
+    ```
+3.  **Confirmação**: O teste visual funcionou, indicando que as media queries estavam sendo processadas corretamente, mas algo no CSS global estava impedindo a responsividade.
+4.  **Causa Raiz**: Foi identificado que a regra `* { max-width: 100vw; }` em `globals.css` estava causando um conflito e impedindo o layout de se ajustar corretamente em telas menores.
+5.  **Solução**: A regra problemática foi removida de `globals.css`.
+6.  **Limpeza**: Após a confirmação de que a responsividade estava funcionando, o código de teste (barra vermelha) foi removido de `src/app/layout.tsx`.
+
+### Commits Relevantes
+
+- `f83ff53` - refactor: remove mobile debug test code (2025-09-21 11:48:05 -0600)
+- `189c99a` - feat: add robust media query test for mobile debugging (2025-09-21 11:40:49 -0600)
+- `5b3b9a1` - fix(css): Remove aggressive max-width from universal selector (2025-09-21 11:08:28 -0600)
+
+---
+
+## 🚨 Problemas Identificados e Soluções (Histórico Anterior)
 
 ### **Problema Principal**: Fotos não aparecem em produção (Resolvido)
 
@@ -43,239 +79,7 @@ O problema foi resolvido em duas etapas:
 1.  **Correção das variáveis de ambiente na Vercel**, eliminando caracteres ocultos.
 2.  **Limpeza de cache** para garantir que o frontend buscasse e exibisse os dados mais recentes.
 
-#### **Investigação Realizada**:
-
-1. **Variáveis de Ambiente**:
-   ```bash
-   CLOUDINARY_CLOUD_NAME=daoxy15hl
-   CLOUDINARY_API_KEY=475458441341848
-   CLOUDINARY_API_SECRET=SgzQInXLDji7vk6jBt_P8wYpSgw
-   ```
-   - ✅ Configuradas corretamente no Vercel
-   - ✅ Carregadas em desenvolvimento (.env.local)
-   - ✅ Detectadas pelo endpoint /api/debug
-
-2. **Estrutura das Fotos no Cloudinary**:
-   - 📁 Pasta: `annapinkerman-site-photos`
-   - 🏷️ Tags: `behind-the-scenes-details`, `guests-arriving`, `ceremony-tributes`, `waltz`, `party-vibes`
-   - 📊 Quantidade: 23, 100, 54, 61, 3 fotos respectivamente
-
-3. **Testes de API**:
-   ```bash
-   # Desenvolvimento - FUNCIONANDO
-   curl "http://localhost:3000/api/photos/behind-the-scenes-details"
-   # Retorna: Array de 23 fotos com secure_url válidas
-   
-   # Produção - FALHANDO  
-   curl "https://www.annapinkerman.com/api/photos/behind-the-scenes-details"
-   # Retorna: {"error":"Internal server error","message":"Unknown error"}
-   ```
-
----
-
-## 🔧 Alterações Implementadas
-
-### **1. Correção da Estrutura da API**
-
-**Problema**: API mudou de estrutura durante desenvolvimento, quebrando compatibilidade.
-
-**Solução**: Restauração da estrutura original:
-
-```typescript
-// ANTES (quebrado)
-return NextResponse.json({
-  photos: Photo[],
-  category: string,
-  tag: string,
-  total: number,
-  success: boolean
-})
-
-// DEPOIS (funcionando)
-return NextResponse.json(CloudinaryPhoto[])
-```
-
-**Arquivos alterados**:
-- `src/app/api/photos/[tag]/route.ts`
-- `src/components/PhotoGallery.tsx`
-- `src/components/MasonryGrid.tsx`
-
-### **2. Correção do Método de Busca**
-
-**Problema**: Tentativa de buscar por pastas em vez de tags.
-
-**Solução**: Retorno ao método original de busca por tags:
-
-```typescript
-// FUNCIONANDO
-const result = await cloudinary.v2.search
-  .expression(`tags=${tag}`)
-  .max_results(100)
-  .execute()
-```
-
-### **3. Correção de Importações**
-
-**Problema**: ESLint bloqueando imports `require()`.
-
-**Solução**: 
-- Conversão para ES6 imports
-- Configuração do ESLint:
-
-```javascript
-// eslint.config.mjs
-rules: {
-  "@typescript-eslint/no-explicit-any": "off",
-  "@typescript-eslint/no-require-imports": "off",
-}
-```
-
-### **4. Logs de Debug Adicionados**
-
-```typescript
-console.log('🚀 API Route started')
-console.log('📋 Resolving params...')
-console.log('✅ Params resolved:', resolvedParams)
-console.log('Configuring Cloudinary...')
-console.log('✅ Cloudinary configured successfully')
-console.log('Starting Cloudinary search...')
-console.log('✅ Cloudinary search completed')
-```
-
----
-
-## 📊 Status Atual
-
-### **✅ Funcionando**:
-- Build de produção sem erros
-- Variáveis de ambiente configuradas
-- API em desenvolvimento funcionando perfeitamente
-- Estrutura de dados consistente
-- Logs detalhados implementados
-
-### **❌ Problemas Identificados**:
-- **ROTA PRINCIPAL**: APIs não estão sendo reconhecidas em produção
-- **CACHE**: Possível cache do Vercel servindo versão antiga
-- **DEPLOY**: Rotas podem não estar sendo deployadas corretamente
-
-### **🧪 Testes Realizados**:
-
-| Endpoint | Desenvolvimento | Produção | Status |
-|----------|----------------|----------|--------|
-| `/api/debug` | ✅ OK | ✅ OK | **FUNCIONANDO** |
-| `/api/photos/[tag]` | ✅ OK | ❌ 500 | **FALHANDO** |
-| `/api/test-simple` | ✅ OK | ❌ 404 | **FALHANDO** |
-
----
-
-## 🎯 Próximos Passos
-
-### **Solução A - Limpar Cache e Redeploy**:
-1. Forçar novo deploy no Vercel
-2. Limpar cache do CDN
-3. Verificar se as rotas são reconhecidas
-
-### **Solução B - Investigação Profunda**:
-1. Verificar logs do Vercel
-2. Analisar configuração de build
-3. Testar com API simplificada
-
-### **Solução C - Fallback Temporário**:
-1. Implementar API sem Cloudinary
-2. Usar imagens estáticas temporariamente
-3. Corrigir Cloudinary em paralelo
-
----
-
-## 📁 Estrutura de Arquivos Relevantes
-
-```
-src/
-├── app/
-│   ├── api/
-│   │   ├── photos/[tag]/route.ts    # API principal das fotos
-│   │   ├── debug/route.ts           # API de debug
-│   │   └── test-simple/route.ts     # API de teste
-│   └── page.tsx                     # Página principal
-├── components/
-│   ├── PhotoGallery.tsx            # Componente da galeria
-│   └── MasonryGrid.tsx             # Grid de fotos
-└── lib/
-    └── photo-data.ts               # Dados dos álbuns
-```
-
----
-
-## 🔑 Informações Técnicas Importantes
-
-### **Configuração do Cloudinary**:
-```typescript
-cloudinary.v2.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true,
-});
-```
-
-### **Estrutura de Resposta da API**:
-```typescript
-interface CloudinaryPhoto {
-  public_id: string;
-  secure_url: string;
-  width: number;
-  height: number;
-  tags: string[];
-  context?: any;
-}
-```
-
-### **Tags Disponíveis**:
-- `behind-the-scenes-details` (23 fotos)
-- `guests-arriving` (100 fotos)
-- `ceremony-tributes` (54 fotos)
-- `waltz` (61 fotos)
-- `party-vibes` (3 fotos)
-
----
-
-## 📝 Comandos Úteis
-
-```bash
-# Testar API localmente
-curl "http://localhost:3000/api/photos/behind-the-scenes-details"
-
-# Testar API em produção
-curl "https://www.annapinkerman.com/api/photos/behind-the-scenes-details"
-
-# Verificar variáveis de ambiente
-curl "https://www.annapinkerman.com/api/debug"
-
-# Build local
-npm run build
-
-# Deploy
-git add . && git commit -m "message" && git push
-```
-
----
-
-## 🚨 Problemas Conhecidos
-
-1. **APIs não funcionam em produção** - Causa raiz ainda não identificada
-2. **Cache do Vercel** - Pode estar servindo versão antiga
-3. **Dependência do Cloudinary** - Pode ter problemas de compatibilidade em produção
-
----
-
-## 📞 Contatos e Recursos
-
-- **Repositório**: https://github.com/dkapture1/Annapinkerman-site.git
-- **Deploy**: Vercel
-- **Domínio**: https://www.annapinkerman.com
-- **Cloudinary**: daoxy15hl
-
 ---
 
 *Documento criado em: 19 de Setembro de 2025*  
-*Última atualização: Durante sessão de debugging produção*
+*Última atualização: 21 de Setembro de 2025*
