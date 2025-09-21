@@ -37,9 +37,28 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+      <style>
+        {`
+          @media (max-width: 430px) {
+            .mobile-test {
+              display: block !important;
+              background: red;
+              color: white;
+              padding: 20px;
+              text-align: center;
+              position: fixed;
+              top: 0;
+              left: 0;
+              right: 0;
+              z-index: 9999;
+            }
+          }
+        `}
+      </style>
       <body
         className={`${inter.variable} ${greatVibes.variable} antialiased font-sans overflow-x-hidden`}
       >
+        <div className="mobile-test" style={{ display: 'none' }}>Mobile CSS Test</div>
         {/* Adicione o componente de animação aqui */}
         <AnimatedBackground />
 
