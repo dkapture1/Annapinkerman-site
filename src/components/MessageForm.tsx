@@ -48,7 +48,7 @@ export default function MessageForm() {
   };
 
   return (
-    <section id="message-form" className="py-24">
+    <section id="message-form" className="py-24 w-full overflow-x-hidden px-4 md:px-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white/20 backdrop-blur-lg rounded-2xl shadow-xl p-8 md:p-12 text-center">
           <h2 className="font-script text-5xl text-gray-800 mb-4 drop-shadow-sm">

@@ -60,19 +60,21 @@ const PhotoGallery = () => {
 
   return (
     <div>
-      <div className="flex justify-center space-x-4 mb-8">
-        {albums.map(album => (
-          <button
-            key={album.slug}
-            onClick={() => setActiveAlbumSlug(album.slug)}
-            className={`px-4 py-2 rounded-full text-white transition-colors duration-300 ${
-              activeAlbumSlug === album.slug
-                ? 'bg-pink-500'
-                : 'bg-gray-700 hover:bg-pink-400'
-            }`}>
-            {album.title}
-          </button>
-        ))}
+      <div className="py-4 mb-8">
+        <div className="flex flex-wrap justify-center gap-2 px-4">
+          {albums.map(album => (
+            <button
+              key={album.slug}
+              onClick={() => setActiveAlbumSlug(album.slug)}
+              className={`min-h-[44px] px-4 py-2 rounded-full text-white transition-colors duration-300 text-sm md:text-base ${
+                activeAlbumSlug === album.slug
+                  ? 'bg-pink-500'
+                  : 'bg-gray-700 hover:bg-pink-400'
+              }`}>
+              {album.title}
+            </button>
+          ))}
+        </div>
       </div>
 
       {loading && (

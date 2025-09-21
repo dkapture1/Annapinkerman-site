@@ -9,15 +9,15 @@ import PhotoGallery from '@/components/PhotoGallery';
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen overflow-x-hidden max-w-full">
       <div className="absolute inset-0 w-full h-full z-0">
         {/* <PhotoSlideshow /> */}
       </div>
       <div className="relative z-10">
         <Header />
         <VideoPlayer src="/videos/hero.mp4" />
-        <div id="home" className="pt-24">
-          <h2 className="font-script text-6xl text-center text-gray-800 py-8">
+        <div id="home" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-8">
+          <h2 className="font-script text-4xl sm:text-5xl md:text-7xl text-center text-gray-800">
             Celebrating Anna&apos;s Sweet Fifteen
           </h2>
           <PhotoGallery />

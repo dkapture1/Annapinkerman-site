@@ -26,24 +26,27 @@ const MasonryGrid = ({ photos }: MasonryGridProps) => {
   }
 
   return (
-    <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-      {validPhotos.map((photo) => (
-        <div key={photo.public_id} className="break-inside-avoid">
-          <Image
-            src={photo.secure_url} // Use the correct property for the image source
-            alt={`Gallery image ${photo.public_id}`}
-            width={500}
-            height={500}
-            className="w-full h-auto rounded-lg shadow-lg"
-            onError={(e) =>
-              console.error(
-                'ERRO AO CARREGAR A IMAGEM:',
-                (e.target as HTMLImageElement).src
-              )
-            }
-          />
-        </div>
-      ))}
+    <div className="w-full overflow-x-hidden">
+      <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-2 md:gap-4 max-w-full">
+        {validPhotos.map((photo) => (
+          <div key={photo.public_id} className="break-inside-avoid">
+            <Image
+              src={photo.secure_url} // Use the correct property for the image source
+              alt={`Gallery image ${photo.public_id}`}
+              width={500}
+              height={500}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="w-full h-auto rounded-lg shadow-lg"
+              onError={(e) =>
+                console.error(
+                  'ERRO AO CARREGAR A IMAGEM:',
+                  (e.target as HTMLImageElement).src
+                )
+              }
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

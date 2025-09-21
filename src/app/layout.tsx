@@ -22,6 +22,12 @@ export const metadata: Metadata = {
   icons: {
     icon: '/images/torre.jpg',
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 };
 
 export default function RootLayout({
@@ -32,15 +38,17 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${inter.variable} ${greatVibes.variable} antialiased font-sans`}
+        className={`${inter.variable} ${greatVibes.variable} antialiased font-sans overflow-x-hidden`}
       >
         {/* Adicione o componente de animação aqui */}
         <AnimatedBackground />
 
         {/* Envolva o conteúdo principal em um container para controle de z-index */}
-        <main style={{ position: 'relative', zIndex: 1 }}>
-          {children}
-        </main>
+        <div className="min-h-screen max-w-full overflow-x-hidden">
+          <main style={{ position: 'relative', zIndex: 1 }}>
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );

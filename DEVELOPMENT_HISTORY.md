@@ -12,12 +12,36 @@
 
 ## 🚨 Problemas Identificados e Soluções
 
-### **Problema Principal**: Fotos não aparecem em produção
+### **Problema Principal**: Fotos não aparecem em produção (Resolvido)
 
 #### **Sintomas**:
-- ✅ Desenvolvimento: Fotos funcionam perfeitamente
-- ❌ Produção: "Failed to fetch photos from Cloudinary" 
-- ❌ Produção: "Internal server error" com "Unknown error"
+- ✅ Desenvolvimento: Fotos funcionam perfeitamente.
+- ❌ Produção: A API retornava erro `500` e as fotos não carregavam.
+
+#### **Investigação e Solução (Passo a Passo)**:
+
+1.  **Diagnóstico Inicial**:
+    *   **Suspeita**: Problema com as variáveis de ambiente (`CLOUDINARY_...`) na Vercel.
+    *   **Ação**: Adicionados logs detalhados na API Route (`src/app/api/photos/[tag]/route.ts`) para inspecionar as variáveis e os erros em produção.
+
+2.  **Análise dos Logs da Vercel**:
+    *   **Descoberta**: Os logs de erro mostraram a mensagem `unknown api_key` e revelaram que as variáveis de ambiente estavam sendo lidas com caracteres de quebra de linha (`\n` e `%0A`) no final.
+    *   **Causa Raiz**: Copiar e colar as variáveis no painel da Vercel incluiu caracteres ocultos, tornando-as inválidas.
+
+3.  **Correção Aplicada**:
+    *   **Solução**: As variáveis de ambiente no painel da Vercel foram apagadas e **digitadas manualmente** para garantir que não havia espaços ou caracteres ocultos.
+    *   **Resultado**: A API passou a retornar status `200`, indicando que a conexão com o Cloudinary foi bem-sucedida.
+
+4.  **Problema Secundário (Frontend)**:
+    *   **Sintoma**: Mesmo com a API funcionando, as fotos ainda não apareciam.
+    *   **Suspeita**: Problema de cache no navegador ou na CDN da Vercel.
+    *   **Ação**: Adicionados `console.log` no componente `PhotoGallery.tsx` para verificar os dados recebidos no lado do cliente.
+    *   **Solução Final**: Forçar a limpeza do cache do navegador (`Cmd/Ctrl + Shift + R`) e fazer um novo deploy na Vercel com a opção de limpar o cache de build resolveu o problema de exibição.
+
+#### **Conclusão**:
+O problema foi resolvido em duas etapas:
+1.  **Correção das variáveis de ambiente na Vercel**, eliminando caracteres ocultos.
+2.  **Limpeza de cache** para garantir que o frontend buscasse e exibisse os dados mais recentes.
 
 #### **Investigação Realizada**:
 
