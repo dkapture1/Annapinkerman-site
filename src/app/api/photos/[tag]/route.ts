@@ -1,44 +1,34 @@
-import { NextRequest, NextResponse } from 'next/server'
-import cloudinary from 'cloudinary'
-
-// Mapeamento das URLs para as pastas reais no Cloudinary
-const categoryMapping: { [key: string]: string } = {
-  'behind-the-scenes-details': 'Photos party/Behind the Scenes & Details',
-  'guests-arriving': 'Photos party/Guests Arriving', 
-  'ceremony-tributes': 'Photos party/Ceremony & Tributes',
-  'waltz': 'Photos party/Waltz',
-  'the-party-vibes': 'Photos party/The Party Vibes'
-}
+import { NextRequest, NextResponse } from 'next/server';
+import cloudinary from 'cloudinary';
+import { albums } from '@/lib/photo-data'; // Import the single source of truth
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ tag: string }> }
+  { params }: { params: Promise<{ tag: string }> } // The parameter from the URL is the slug
 ) {
-  const resolvedParams = await params
-  const { tag } = resolvedParams
+  const resolvedParams = await params;
+  const { tag: slug } = resolvedParams; // Rename for clarity
 
-  console.log(`API route called for tag: ${tag}`);
-  console.log(`Cloud Name read from env: ${process.env.CLOUDINARY_CLOUD_NAME}`);
-  console.log(`API Key read from env: ${process.env.CLOUDINARY_API_KEY ? 'Loaded' : 'NOT LOADED'}`);
-  console.log(`API Secret read from env: ${process.env.CLOUDINARY_API_SECRET ? 'Loaded' : 'NOT LOADED'}`);
+  console.log(`--- API Request Started for Slug: ${slug} ---`);
 
   try {
-    // Verificar se o tag é válido
-    const validTags = Object.keys(categoryMapping)
-    
-    if (!validTags.includes(tag.toLowerCase())) {
-      console.log('Category not found:', tag)
+    // Find the album configuration based on the slug from the URL
+    const album = albums.find(a => a.slug === slug);
+
+    if (!album) {
+      console.log('Album configuration not found for slug:', slug);
       return NextResponse.json(
         { 
-          error: 'Category not found',
-          availableCategories: validTags,
-          receivedTag: tag
+          error: 'Category configuration not found',
+          receivedSlug: slug
         },
         { status: 404 }
-      )
+      );
     }
 
-    // Configurar Cloudinary
+    // The actual tag to search for in Cloudinary
+    const searchTag = album.tag;
+
     cloudinary.v2.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
       api_key: process.env.CLOUDINARY_API_KEY,
@@ -46,11 +36,15 @@ export async function GET(
       secure: true,
     });
 
-    // Buscar imagens por tag no Cloudinary
+    const expression = `tags=${searchTag}`;
+    console.log(`Executing Cloudinary search with expression: "${expression}"`);
+
     const result = await cloudinary.v2.search
-      .expression(`tags=${tag}`)
+      .expression(expression)
       .max_results(100)
-      .execute()
+      .execute();
+    
+    console.log('Cloudinary API Response:', JSON.stringify(result, null, 2));
 
     const photos = result.resources?.map((resource: any) => ({
       public_id: resource.public_id,
@@ -59,9 +53,9 @@ export async function GET(
       height: resource.height,
       tags: resource.tags || [],
       context: resource.context
-    })) || []
+    })) || [];
 
-    return NextResponse.json(photos)
+    return NextResponse.json(photos);
 
   } catch (error: any) {
     console.error('Detailed error caught in API route:', error);
@@ -72,6 +66,6 @@ export async function GET(
         details: 'Check server logs on Vercel for more information.' 
       },
       { status: 500 }
-    )
+    );
   }
 }

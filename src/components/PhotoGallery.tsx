@@ -29,7 +29,7 @@ const PhotoGallery = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`/api/photos/${activeAlbum.tag}`);
+        const response = await fetch(`/api/photos/${activeAlbum.slug}`);
         if (!response.ok) {
           let errorData;
           try {
