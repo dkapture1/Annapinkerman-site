@@ -16,7 +16,10 @@ export async function GET() {
       .max_results(50)
       .execute();
 
-    const videos = result.resources?.map((resource: any) => resource.secure_url) || [];
+    const videos = result.resources?.map((resource: any) => ({
+      videoUrl: resource.secure_url,
+      posterUrl: resource.secure_url.replace(/\.\w+$/, '.jpg'),
+    })) || [];
 
     return NextResponse.json(videos);
 

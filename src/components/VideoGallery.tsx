@@ -2,8 +2,13 @@
 
 import { useState, useEffect } from 'react';
 
+interface VideoData {
+  videoUrl: string;
+  posterUrl: string;
+}
+
 export default function VideoGallery() {
-  const [videoUrls, setVideoUrls] = useState<string[]>([]);
+  const [videos, setVideos] = useState<VideoData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -15,7 +20,7 @@ export default function VideoGallery() {
           throw new Error('Failed to fetch videos');
         }
         const data = await response.json();
-        setVideoUrls(data);
+        setVideos(data);
       } catch (e: any) {
         setError(e.message);
       } finally {
@@ -36,10 +41,11 @@ export default function VideoGallery() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4 sm:p-6 md:p-8">
-      {videoUrls.map(url => (
-        <div key={url} className="mb-4">
+      {videos.map(video => (
+        <div key={video.videoUrl} className="mb-4">
           <video
-            src={url}
+            src={video.videoUrl}
+            poster={video.posterUrl}
             controls
             className="w-full h-auto rounded-lg shadow-lg"
           >
