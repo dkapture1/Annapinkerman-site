@@ -26,25 +26,25 @@ export default function AboutMe() {
                 Anna Pinkerman
               </h2>
               <p className="font-sans text-xl text-gray-600 mb-8 text-center md:text-left">
-                Hey there, I’m Anna, and in 2025, I’m living out one of my biggest dreams: turning 15!
+                Hey there, I’m Anna. This is 2025 and I’m living out one of my biggest dreams…I am turning 15!
               </p>
 
               <div className="space-y-6">
                 <div>
                   <h3 className="font-sans font-semibold text-gray-800">Who She Is</h3>
-                  <p className="font-sans text-gray-700">I’m a dreamer, full of energy, and totally obsessed with sports and nature.</p>
+                  <p className="font-sans text-gray-700">I’m a dreamer, full of energy, and totally obsessed with following Christ, family, Samoyeds ( Oskar, my best friend), supercars, soccer, Formula 1, and nature. I am also a writer. I finished my first book at age 13.</p>
                 </div>
                 <div>
                   <h3 className="font-sans font-semibold text-gray-800">Hobbies and Passions</h3>
-                  <p className="font-sans text-gray-700">I love sports like soccer and cars, and I also enjoy photography and playing the piano. My favorite flowers are a huge passion too—they even inspired the theme of my party!</p>
+                  <p className="font-sans text-gray-700">I love sports such as soccer and car racing; I also enjoy photography and playing the piano. I love traveling and my dream of spending spring in Paris inspired the theme of my 15th birthday “Floral Paris”.</p>
                 </div>
                 <div>
                   <h3 className="font-sans font-semibold text-gray-800">A Little of Her Story</h3>
-                  <p className="font-sans text-gray-700">My journey so far has been a blast full of fun and excitement. As a kid, I’d chase a soccer ball in the backyard and snap pictures of the flowers in my grandma’s garden. A big win for me was learning to play my first songs on the piano, and now I can’t wait to celebrate this milestone with everyone I love.</p>
+                  <p className="font-sans text-gray-700">Named after my maternal grandmother Vovo Anita I can say that My Life Journey so far has been a blast! full of fun and excitement. As I was born in an incredible family, my Mom is Brazilian and my Dad is American; I have been blessed with the best of both worlds. I have two amazing brothers (Zack and Jacob) and it feels wonderful to be the only daughter. When I was only 8 years-old I was blessed to move to my new neighborhood where I met James, The Stradman, who inspired me in so many good ways and to him I attribute my passion for super cars. James’s Pink Lamborghini Aventador is my favorite car in the world. The opportunity to do pictures with my favorite car was truly a dream come true!</p>
                 </div>
                 <div>
                   <h3 className="font-sans font-semibold text-gray-800">What Turning 15 Means to Her</h3>
-                  <p className="font-sans text-gray-700">This date means an amazing transformation, a step toward growing up, and a dream coming true that I’ve held onto for so long. It’s the start of a new chapter!</p>
+                  <p className="font-sans text-gray-700">Saying goodbye to a beautiful childhood and stepping towards growing up… It’s the start of a new promising chapter!</p>
                 </div>
                 <div>
                   <h3 className="font-sans font-semibold text-gray-800">Message to the Guests</h3>

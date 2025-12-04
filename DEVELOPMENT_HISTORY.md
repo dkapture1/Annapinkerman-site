@@ -10,6 +10,25 @@
 
 ---
 
+## 🗓️ 04 de Dezembro de 2025 - Nova Galeria "Prélude à Paris" e Atualizações de Conteúdo
+
+### Funcionalidades Adicionadas
+1.  **Nova Galeria de Fotos**: Adicionada a seção "Prélude à Paris" (`prelude-a-paris`) para exibir fotos do ensaio pré-aniversário.
+2.  **Atualização de Conteúdo**: Textos da seção "Sobre Mim" (`AboutMe.tsx`) foram atualizados com novas informações sobre a família, hobbies e história.
+3.  **Migração de Mídia**:
+    - Criados scripts Python (`scripts/migrate_local_photos.py` e `scripts/migrate_local_videos.py`) para facilitar o upload de arquivos locais para o Cloudinary.
+    - Implementada compressão automática de imagens para respeitar os limites do plano gratuito do Cloudinary.
+4.  **Otimização de Performance**:
+    - O componente `MasonryGrid` foi atualizado para solicitar imagens otimizadas (`w_800,q_auto,f_auto`) do Cloudinary, resolvendo problemas de carregamento e renderização de imagens grandes.
+
+### Arquivos Modificados
+- `src/lib/photo-data.ts`: Configuração da nova galeria.
+- `src/components/AboutMe.tsx`: Atualização de textos.
+- `src/components/MasonryGrid.tsx`: Fix de otimização de imagens.
+- `scripts/`: Novos scripts de migração.
+
+---
+
 ## 🗓️ 21 de Setembro de 2025 - Debug de Responsividade Mobile
 
 ### Problema

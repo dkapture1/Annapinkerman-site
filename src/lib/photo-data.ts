@@ -7,6 +7,12 @@ export interface Album {
 
 export const albums: Album[] = [
   {
+    title: "Prélude à Paris",
+    slug: "prelude-a-paris",
+    tag: "pre-session",
+    photos: [],
+  },
+  {
     title: "Behind the Scenes & Details",
     slug: "behind-the-scenes-details",
     tag: "behind-the-scenes-details",
