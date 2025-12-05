@@ -19,7 +19,7 @@ export default function Header() {
         <div className="flex justify-between items-center py-6">
           {/* Logo/Nome */}
           <div className="flex-shrink-0">
-            <h1 className="text-4xl font-script text-gray-800 drop-shadow-sm">
+            <h1 className="text-2xl md:text-3xl font-parisienne-force text-pink-500 tracking-wider">
               Anna Pinkerman
             </h1>
           </div>
@@ -30,7 +30,7 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-gray-800 hover:text-primary-pink font-sans font-semibold transition-colors duration-200 hover:scale-105"
+                className="text-gray-800 hover:text-primary-pink font-parisienne-force text-xl md:text-2xl tracking-wide font-semibold transition-colors duration-200 hover:scale-105"
               >
                 {item.name}
               </Link>

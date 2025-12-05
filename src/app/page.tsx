@@ -18,13 +18,13 @@ export default function Home() {
         <Header />
         <VideoPlayer />
         <div id="home" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-8">
-          <h2 className="font-script text-4xl sm:text-5xl md:text-7xl text-center text-gray-800">
+          <h2 className="font-parisienne-force text-5xl sm:text-6xl md:text-8xl text-center text-gray-800 drop-shadow-md">
             Celebrating Anna&apos;s Sweet Fifteen
           </h2>
           <PhotoGallery />
         </div>
         <section>
-          <h2 className="font-script text-4xl sm:text-5xl md:text-7xl text-center text-gray-800">
+          <h2 className="font-parisienne-force text-4xl sm:text-5xl md:text-7xl text-center text-gray-800">
             Movies
           </h2>
           <VideoGallery />
@@ -34,7 +34,7 @@ export default function Home() {
         <MessageForm />
         <section id="memories" className="py-24 text-center">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-script text-5xl text-gray-800 mb-12 drop-shadow-sm">
+            <h2 className="font-parisienne-force text-5xl text-gray-800 mb-12 drop-shadow-sm">
               Our Sweetest Memories
             </h2>
             <MemoriesCarousel />

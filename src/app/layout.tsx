@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Great_Vibes } from "next/font/google";
+import { Inter, Great_Vibes, Parisienne } from "next/font/google";
 import "./globals.css";
 
 // Importe o novo componente
@@ -16,11 +16,19 @@ const greatVibes = Great_Vibes({
   weight: "400",
 });
 
+const parisienne = Parisienne({
+  variable: "--font-parisienne",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export const metadata: Metadata = {
   title: "Anna Pinkerman",
   description: "Site oficial de Anna Pinkerman",
   icons: {
-    icon: '/images/torre.jpg',
+    icon: [
+      { url: '/images/anna-19-icon.png', type: 'image/png' },
+    ],
   },
   viewport: {
     width: 'device-width',
@@ -38,7 +46,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${inter.variable} ${greatVibes.variable} antialiased font-sans overflow-x-hidden`}
+        className={`${inter.variable} ${greatVibes.variable} ${parisienne.variable} antialiased font-sans overflow-x-hidden`}
       >
         {/* Adicione o componente de animação aqui */}
         <AnimatedBackground />

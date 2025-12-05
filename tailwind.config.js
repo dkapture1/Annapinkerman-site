@@ -13,7 +13,8 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        script: ['Great Vibes', 'cursive'],
+        script: ['var(--font-great-vibes)', 'cursive'],
+        parisienne: ['var(--font-parisienne)', 'cursive'],
         serif: ['Georgia', 'Times New Roman', 'serif'],
       },
     },

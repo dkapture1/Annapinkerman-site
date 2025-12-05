@@ -10,6 +10,27 @@
 
 ---
 
+## 🗓️ 04 de Dezembro de 2025 (Noite) - Identidade Visual "Floral Paris"
+
+### Funcionalidades Adicionadas
+1.  **Identidade Visual Expandida**:
+    - A fonte **Parisienne** foi aplicada globalmente a todos os títulos (`h1-h6`) para reforçar o tema "Floral Paris".
+    - Botões de filtro da galeria e datas foram estilizados com a nova fonte cursiva.
+    - Tamanhos de fonte aumentados para garantir legibilidade e impacto.
+2.  **Favicon Personalizado**:
+    - O ícone do site foi atualizado para uma versão otimizada da foto "Anna-19" (PNG e ICO), substituindo o padrão do Vercel.
+3.  **Correções Técnicas**:
+    - Resolvido erro de parsing de CSS movendo a importação de fontes para o topo do `globals.css`.
+    - Ajustada a configuração do Tailwind para integrar corretamente a fonte Parisienne.
+
+### Arquivos Modificados
+- `src/app/globals.css`: Importação de fontes e regras globais de tipografia.
+- `src/app/layout.tsx`: Configuração de favicon e carregamento de fontes.
+- `src/components/Header.tsx`, `PhotoGallery.tsx`, `PartyDetails.tsx`, `page.tsx`: Ajustes de estilo.
+- `tailwind.config.js`: Mapeamento de fontes.
+
+---
+
 ## 🗓️ 04 de Dezembro de 2025 - Nova Galeria "Prélude à Paris" e Atualizações de Conteúdo
 
 ### Funcionalidades Adicionadas

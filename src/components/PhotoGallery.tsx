@@ -66,11 +66,10 @@ const PhotoGallery = () => {
             <button
               key={album.slug}
               onClick={() => setActiveAlbumSlug(album.slug)}
-              className={`min-h-[44px] px-4 py-2 rounded-full text-white transition-colors duration-300 text-sm md:text-base ${
-                activeAlbumSlug === album.slug
+              className={`min-h-[44px] px-6 py-3 rounded-full text-white transition-colors duration-300 font-parisienne-force text-xl md:text-2xl tracking-wide ${activeAlbumSlug === album.slug
                   ? 'bg-pink-500'
                   : 'bg-gray-700 hover:bg-pink-400'
-              }`}>
+                }`}>
               {album.title}
             </button>
           ))}

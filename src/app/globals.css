@@ -1,4 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
 @import "tailwindcss";
+
+.font-parisienne-force {
+  font-family: 'Parisienne', cursive !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Parisienne', cursive !important;
+}
 
 :root {
   --background: #ffffff;
@@ -36,5 +50,13 @@ body::before {
   z-index: -1;
 }
 
-html,body{overflow-x:hidden;max-width:100vw;overscroll-behavior-x:none} *{box-sizing:border-box}
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  overscroll-behavior-x: none
+}
 
+* {
+  box-sizing: border-box
+}
