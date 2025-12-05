@@ -14,7 +14,7 @@
 
 ### Funcionalidades Adicionadas
 1.  **Galeria de Vídeos (Movies)**:
-    - Upload de 10 novos vídeos para a seção "Movies".
+    - Upload de **13 vídeos** para a seção "Movies" (10 iniciais + 3 adicionais).
     - Redesign completo da galeria para um estilo "Premium Floral Paris".
     - Implementação de layout Masonry responsivo.
     - Remoção de títulos visuais para um visual mais limpo ("clean").
