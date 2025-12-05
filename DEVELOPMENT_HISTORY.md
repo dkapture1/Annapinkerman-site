@@ -22,6 +22,8 @@
     - Pequena correção ortográfica ("supercars") na seção "Sobre Mim".
 3.  **Correção de Bug (Cache de Vídeos)**:
     - A rota da API de vídeos (`/api/videos`) foi forçada para ser dinâmica (`force-dynamic`), garantindo que novos uploads apareçam imediatamente em produção sem problemas de cache.
+4.  **Atualização de Segurança (Next.js)**:
+    - Atualização do Next.js para a versão mais recente (`latest`) para mitigar a vulnerabilidade CVE-2025-66478, conforme exigido pela Vercel.
 
 ### Arquivos Modificados
 - `src/components/VideoGallery.tsx`: Redesign e lógica de exibição.
