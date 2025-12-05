@@ -20,6 +20,8 @@
     - Remoção de títulos visuais para um visual mais limpo ("clean").
 2.  **Atualização de Conteúdo**:
     - Pequena correção ortográfica ("supercars") na seção "Sobre Mim".
+3.  **Correção de Bug (Cache de Vídeos)**:
+    - A rota da API de vídeos (`/api/videos`) foi forçada para ser dinâmica (`force-dynamic`), garantindo que novos uploads apareçam imediatamente em produção sem problemas de cache.
 
 ### Arquivos Modificados
 - `src/components/VideoGallery.tsx`: Redesign e lógica de exibição.
