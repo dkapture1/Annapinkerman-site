@@ -10,6 +10,25 @@
 
 ---
 
+## 🗓️ 05 de Dezembro de 2025 - Videos Premium e Ajustes de Texto
+
+### Funcionalidades Adicionadas
+1.  **Galeria de Vídeos (Movies)**:
+    - Upload de 10 novos vídeos para a seção "Movies".
+    - Redesign completo da galeria para um estilo "Premium Floral Paris".
+    - Implementação de layout Masonry responsivo.
+    - Remoção de títulos visuais para um visual mais limpo ("clean").
+2.  **Atualização de Conteúdo**:
+    - Pequena correção ortográfica ("supercars") na seção "Sobre Mim".
+
+### Arquivos Modificados
+- `src/components/VideoGallery.tsx`: Redesign e lógica de exibição.
+- `src/app/api/videos/route.ts`: Melhoria na resposta da API (embora títulos não sejam mais usados na UI).
+- `src/components/AboutMe.tsx`: Ajuste de texto.
+- `uploaded_videos.json`: Registro dos novos uploads.
+
+---
+
 ## 🗓️ 04 de Dezembro de 2025 (Noite) - Identidade Visual "Floral Paris"
 
 ### Funcionalidades Adicionadas

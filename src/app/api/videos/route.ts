@@ -19,6 +19,7 @@ export async function GET() {
     const videos = result.resources?.map((resource: any) => ({
       videoUrl: resource.secure_url,
       posterUrl: resource.secure_url.replace(/\.\w+$/, '.jpg'),
+      title: (resource.filename || resource.public_id.split('/').pop()).replace(/_/g, ' ').replace(/-/g, ' '),
     })) || [];
 
     return NextResponse.json(videos);
@@ -26,9 +27,9 @@ export async function GET() {
   } catch (error: any) {
     console.error('Error fetching videos from Cloudinary:', error);
     return NextResponse.json(
-      { 
-        error: 'Failed to fetch videos.', 
-        details: error.message 
+      {
+        error: 'Failed to fetch videos.',
+        details: error.message
       },
       { status: 500 }
     );
