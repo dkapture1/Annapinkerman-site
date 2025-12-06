@@ -24,6 +24,8 @@
     - A rota da API de vídeos (`/api/videos`) foi forçada para ser dinâmica (`force-dynamic`), garantindo que novos uploads apareçam imediatamente em produção sem problemas de cache.
 4.  **Atualização de Segurança (Next.js)**:
     - Atualização do Next.js para a versão mais recente (`latest`) para mitigar a vulnerabilidade CVE-2025-66478, conforme exigido pela Vercel.
+5.  **Ajuste de Layout (Homepage)**:
+    - A seção "Sobre Mim" (`AboutMe`) foi movida para o topo da página, logo abaixo do cabeçalho e antes do primeiro vídeo, para dar mais destaque à história da Anna.
 
 ### Arquivos Modificados
 - `src/components/VideoGallery.tsx`: Redesign e lógica de exibição.

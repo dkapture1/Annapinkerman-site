@@ -16,6 +16,7 @@ export default function Home() {
       </div>
       <div className="relative z-10">
         <Header />
+        <AboutMe />
         <VideoPlayer />
         <div id="home" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-8">
           <h2 className="font-parisienne-force text-5xl sm:text-6xl md:text-8xl text-center text-gray-800 drop-shadow-md">
@@ -29,7 +30,6 @@ export default function Home() {
           </h2>
           <VideoGallery />
         </section>
-        <AboutMe />
         <PartyDetails />
         <MessageForm />
         <section id="memories" className="py-24 text-center">
